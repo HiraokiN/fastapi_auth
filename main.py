@@ -10,7 +10,7 @@ from models import model_git_info, model_stack, model_user
 from schemas import schema_git_info, schema_stack, schema_user
 from database import SessionLocal, engine, Base
 from password_crypter import PasswordCrypter
-from token_generator import TokenGenerator
+from token_generator import TokenGenerator,TokenGeneratorError
 
 ADMIN_USERNAME="admin"
 ADMIN_EMAIL="admin@admin.com"
@@ -55,7 +55,11 @@ def insert_initial_data():
 
 # 共通処理
 def check_token(token: str, db: Session, only_admin=False):
-    name = TokenGenerator.get_username_from_token(token)
+    try:
+        name = TokenGenerator.get_username_from_token(token)
+    except TokenGeneratorError:
+        raise HTTPException(status_code=400, detail="Token is invalid")
+
     db_user = crud.get_user_by_name(db, name=name)
     if not db_user:
         raise HTTPException(status_code=400, detail="User does not exist")
