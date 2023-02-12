@@ -8,3 +8,11 @@ services:
       - POSTGRES_DB=test01
     ports:
       - 5432:5432
+    
+  pg_admin:
+    image: dpage/pgadmin4
+    ports:
+      - 80:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: example@example.com
+      PGADMIN_DEFAULT_PASSWORD: password
