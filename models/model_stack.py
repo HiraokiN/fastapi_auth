@@ -5,7 +5,7 @@ from database import Base
 
 
 class Stack(Base):
-    __tablename__ = "stack"
+    __tablename__ = "stacks"
     id = Column(Integer, primary_key=True, index=True)
     stack_id = Column(Integer, index=True)
     stack_name = Column(String)

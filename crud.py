@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from models import model_git_info, model_stack, model_user
 from schemas import schema_git_info, schema_stack, schema_user
+from password_crypter import PasswordCrypter
 
 
 def get_user(db: Session, user_id: int):
@@ -22,8 +23,8 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_user(db: Session, user: schema_user.UserCreate):
-    fake_hashed_password = user.password + "notreallyhashed"
-    db_user = model_user.User(email=user.email, hashed_password=fake_hashed_password, group=0, name=user.name, is_active=True)
+    hashed_password = PasswordCrypter.get_hash(password=user.password)
+    db_user = model_user.User(email=user.email, hashed_password=hashed_password, name=user.name, is_active=True, is_admin=False)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

@@ -12,8 +12,8 @@ class UserCreate(UserBase):
     pass
 
 class UserResponse(UserBase):
-    group: int
     is_active: bool
+    is_admin: bool
 
 class User(UserBase):
     password: str
